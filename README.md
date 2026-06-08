@@ -1,4 +1,4 @@
-Pong (Unity)
+Pong (Unity2D)
 =================
 
 Mô tả

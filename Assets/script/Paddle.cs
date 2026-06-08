@@ -6,7 +6,19 @@ public class Paddle : MonoBehaviour
 {
     public Rigidbody2D rb;
     public float speed = 2f;
-    public float id;
+    public int id;
+    private Vector3 startPosition;
+
+    private void Start()
+    {
+        startPosition = transform.position;
+        GameManager.instance.onReset += ResetPosition;
+    }
+    private void ResetPosition()
+    {
+        transform.position = startPosition;
+
+    }
 
     private void Update()
     {

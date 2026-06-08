@@ -9,9 +9,15 @@ public class Ball : MonoBehaviour
     public float InitialAngle = 0.67f;
     public float startX = 0f;
     public float maxStartY = 4f;
-    public GameManager gameManager;
+    public float speedMultiplier = 1.1f;
     void Start()
     {
+        InitiaPush();
+        GameManager.instance.onReset += ResetBall;
+    }
+    private void ResetBall()
+    {
+        ResetBallPosititon();
         InitiaPush();
     }
     public void InitiaPush()
@@ -23,7 +29,7 @@ public class Ball : MonoBehaviour
         rb.velocity = dir * speed;
     }
 
-    public void resetBall()
+    public void ResetBallPosititon()
     {
         float posY = Random.Range(-maxStartY, maxStartY);
         Vector2 position = new Vector2(startX, posY);
@@ -32,12 +38,19 @@ public class Ball : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
         scoreZone scoreZone = collision.GetComponent<scoreZone>();
-        if (scoreZone != null)
+        if (scoreZone)
         {
-            gameManager.OnScoreZoneReached(scoreZone.id);
-            resetBall();
-            InitiaPush();
+            GameManager.instance.OnScoreZoneReached(scoreZone.id);
+
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Paddle paddle = collision.collider.GetComponent<Paddle>();
+        if (paddle)
+        {
+            rb.velocity *= speedMultiplier;
+        }
+    }
 }
